@@ -108,5 +108,45 @@ let rec compress = function
 
 assert ((compress ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"]) = ["a"; "b"; "c"; "a"; "d"; "e"]);;
 
+(*
+    Pack consecutive duplicates of list elements into sublists. (medium)
+*)
+
+let pack list = 
+    let rec aux current acum = function
+        | [] -> []
+        | [x] -> (x::current)::acum
+        | st::nd::t -> if st = nd
+            then (aux (st::current) acum (nd::t))
+            else (aux [] ((st::current)::acum) (nd::t))
+        in
+        List.rev (aux [] [] list)
+;;
+
+assert ((pack ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"d";"e";"e";"e";"e"])
+ = [["a"; "a"; "a"; "a"];["b"]; ["c"; "c"]; ["a"; "a"]; ["d"; "d"];
+ ["e"; "e"; "e"; "e"]]
+);;
+
+(*
+    Run-length encoding of a list. (easy)
+*)
+
+let encode list =
+    let rec aux count acum = function
+    | [] -> []
+    | [x] -> ((count+1),x)::acum
+    | st::nd::tail -> if st = nd
+        then aux (count+1) acum (nd::tail)
+        else aux 0 (((count+1), st)::acum) (nd::tail)
+    in List.rev (aux 0 [] list)
+;;
+
+(* As alternative, solutions suggest that other List.map could be used in combination with pack *)
+         
+assert ((encode ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"])
+= [(4, "a"); (1, "b"); (2, "c"); (2, "a"); (1, "d"); (4, "e")]
+);;
+
 
 print_endline "Ok."
