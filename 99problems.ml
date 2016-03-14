@@ -149,4 +149,140 @@ assert ((encode ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"])
 );;
 
 
+(*
+    Modified run-length encoding. (easy)
+*)
+
+type 'a rle =
+    | One of 'a
+    | Many of int * 'a;;
+    
+let mencode list =
+    let aux = function
+        | (1, x) -> One x
+        | (n, x) -> Many (n,x)
+    in
+    List.map aux (encode list) 
+;;
+    
+assert ((mencode ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"])
+= [Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e")]
+);;
+
+(*
+    Decode a run-length encoded list. (medium)
+*)
+
+let rec decode d = 
+    let rec repeat_element x = function
+        | 0 -> []
+        | n -> x::(repeat_element x (n-1)) in
+    match d with
+        | [] -> []
+        | (One x)::t -> x::(decode t)
+        | Many (n,x)::t -> (repeat_element x n) @ (decode t)
+;;
+
+assert ((decode [Many (4,"a"); One "b"; Many (2,"c"); Many (2,"a"); One "d"; Many (4,"e")])
+= ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"]
+);;
+
+(*
+    Run-length encoding of a list (direct solution). (medium)
+*)
+
+(* I'm skipping this -- too boring
+assert ((encode_v2 ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"])
+= [Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e")])
+*)
+
+
+(*
+    Duplicate the elements of a list. (easy)
+*)
+
+let rec duplicate = function
+| [] -> []
+| h::t -> h::h::(duplicate t)
+;;
+
+assert ((duplicate ["a";"b";"c";"c";"d"])
+= ["a"; "a"; "b"; "b"; "c"; "c"; "c"; "c"; "d"; "d"]);;
+
+(*
+    Replicate the elements of a list a given number of times. (medium)
+*)
+
+let replicate list n = 
+    let rec prepend acc n x = 
+        if n = 0 then acc
+        else (prepend (x::acc) (n-1) x)
+    in  
+    let rec aux acc n = function
+        | [] -> acc
+        | h::t -> aux (prepend acc n h) n t
+    in
+    aux [] n (List.rev list)
+;;
+assert ((replicate ["a";"b";"c"] 3) = ["a"; "a"; "a"; "b"; "b"; "b"; "c"; "c"; "c"])
+;;
+
+
+(*
+    Drop every N'th element from a list. (medium)
+*)
+
+let drop list n= 
+    let rec aux n i acum = function
+        | [] -> acum
+        | h::t -> if i =n then (aux n 1 acum t) else (aux n (i+1) (h::acum) t) 
+    in List.rev (aux n 1 [] list)
+;;
+
+assert ((drop ["a";"b";"c";"d";"e";"f";"g";"h";"i";"j"] 3) = ["a"; "b"; "d"; "e"; "g"; "h"; "j"])
+;;
+
+
+(*
+    Split a list into two parts; the length of the first part is given. (easy)
+*)
+
+let split list n =
+    let rec aux acum n i = function
+    | [] -> ((List.rev acum),[])
+    | h::t -> 
+        if i=n then ((List.rev (h::acum)), t) else (aux (h::acum) n (i+1) t)
+    in aux [] n 1 list
+;;
+
+assert((split ["a";"b";"c";"d";"e";"f";"g";"h";"i";"j"] 3) = (["a"; "b"; "c"], ["d"; "e"; "f"; "g"; "h"; "i"; "j"]));
+assert((split ["a";"b";"c";"d"] 5)=(["a"; "b"; "c"; "d"], []));;
+
+(*
+    Extract a slice from a list. (medium)
+*)
+
+let slice list i k = 
+    fst (split (snd (split list i)) (k-1))
+;;
+
+assert ((slice ["a";"b";"c";"d";"e";"f";"g";"h";"i";"j"] 2 6) = ["c"; "d"; "e"; "f"; "g"])
+;;
+
+
+(*
+    Rotate a list N places to the left. (medium)
+*)
+
+let rotate list n = 
+    let k = if n< 0 then (n+(List.length list)) else n in
+    match (split list k) with
+    | (a,b) -> b@a
+;;
+
+assert ((rotate ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] 3) = ["d"; "e"; "f"; "g"; "h"; "a"; "b"; "c"]);
+assert ((rotate ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] (-2)) = ["g"; "h"; "a"; "b"; "c"; "d"; "e"; "f"])
+;;
+
+
 print_endline "Ok."
