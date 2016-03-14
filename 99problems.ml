@@ -1,4 +1,8 @@
 (*
+	All exercises at https://ocaml.org/learn/tutorials/99problems.html
+*)
+
+(*
  *  Write a function last : 'a list -> 'a option
  *  that returns the last element of a list.
  *)
@@ -251,12 +255,13 @@ let split list n =
     let rec aux acum n i = function
     | [] -> ((List.rev acum),[])
     | h::t -> 
-        if i=n then ((List.rev (h::acum)), t) else (aux (h::acum) n (i+1) t)
-    in aux [] n 1 list
+        if i<n then (aux (h::acum) n (i+1) t) else ((List.rev (acum)), h::t)
+    in aux [] n 0 list
 ;;
 
 assert((split ["a";"b";"c";"d";"e";"f";"g";"h";"i";"j"] 3) = (["a"; "b"; "c"], ["d"; "e"; "f"; "g"; "h"; "i"; "j"]));
-assert((split ["a";"b";"c";"d"] 5)=(["a"; "b"; "c"; "d"], []));;
+assert((split ["a";"b";"c";"d"] 5)=(["a"; "b"; "c"; "d"], []));
+assert((split ["a";"b";"c";"d"] 0)=([],["a"; "b"; "c"; "d"]));; (*extra*)
 
 (*
     Extract a slice from a list. (medium)
@@ -284,5 +289,16 @@ assert ((rotate ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] 3) = ["d"; "e"; "f"; "g
 assert ((rotate ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] (-2)) = ["g"; "h"; "a"; "b"; "c"; "d"; "e"; "f"])
 ;;
 
+(*
+	Remove the K'th element from a list. (easy)
+*)
+
+let remove_at n list=
+	match (split list n) with
+	| (a,h::b) -> a@b
+	| (a,[]) -> a
+;;
+assert ((remove_at 1 ["a";"b";"c";"d"])=["a"; "c"; "d"]);
+assert ((remove_at 0 ["a";"b";"c";"d"])=["b"; "c"; "d"]);; (*extra*)
 
 print_endline "Ok."
