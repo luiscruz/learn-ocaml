@@ -1,8 +1,8 @@
-(*
+(**
 	All exercises at https://ocaml.org/learn/tutorials/99problems.html
 *)
 
-(*
+(**
  *  Write a function last : 'a list -> 'a option
  *  that returns the last element of a list.
  *)
@@ -15,7 +15,7 @@ let rec last = function
 assert (last [ "a" ; "b" ; "c" ; "d" ] = Some "d");
 assert (last [] = None);;
 
-(*
+(**
  *  Find the last but one (last and penultimate)
  *  elements of a list. (easy)
  *)
@@ -29,7 +29,7 @@ let rec last_two = function
 assert ((last_two [ "a" ; "b" ; "c" ; "d" ]) = Some ("c", "d"));
 assert ((last_two [ "a" ]) = None);;
 
-(*
+(**
     Find the k'th element of a list. (easy)
 *)
 
@@ -40,7 +40,7 @@ let rec at i = function
 assert ((at 3 [ "a" ; "b"; "c"; "d"; "e" ]) = Some "c");
 assert ((at 3 [ "a" ]) = None);;
 
-(*
+(**
     Find the number of elements of a list. (easy)
 *)
 
@@ -60,17 +60,17 @@ let tail_recursive_length list =
 assert ((tail_recursive_length [ "a" ; "b" ; "c"]) = 3);
 assert ((tail_recursive_length []) = 0);;
 
-(*
+(**
     Reverse a list. (easy)
 *)
 
 let rec rev = function
     | [] -> []
-    | h::t -> (rev t) @ [h];; (**probably, this is ineficient*)
+    | h::t -> (rev t) @ [h];; (*probably, this is ineficient*)
 
 assert ((rev ["a" ; "b" ; "c"]) = ["c"; "b"; "a"]);;
 
-(*
+(**
     Find out whether a list is a palindrome. (easy)
 *)
 
@@ -80,7 +80,7 @@ let is_palindrome list =
 assert ((is_palindrome [ "x" ; "a" ; "m" ; "a" ; "x" ]) = true);
 assert ((not (is_palindrome [ "a" ; "b" ])) = true );;
 
-(*
+(**
     Flatten a nested list structure. (medium)
 *)
 
@@ -98,7 +98,7 @@ assert (
     =  ["a"; "b"; "c"; "d"; "e"]
 );;
 
-(*
+(**
     Eliminate consecutive duplicates of list elements. (medium)    
 *)
 
@@ -112,7 +112,7 @@ let rec compress = function
 
 assert ((compress ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"]) = ["a"; "b"; "c"; "a"; "d"; "e"]);;
 
-(*
+(**
     Pack consecutive duplicates of list elements into sublists. (medium)
 *)
 
@@ -132,7 +132,7 @@ assert ((pack ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"d";"e";"e";"e";"e"])
  ["e"; "e"; "e"; "e"]]
 );;
 
-(*
+(**
     Run-length encoding of a list. (easy)
 *)
 
@@ -153,7 +153,7 @@ assert ((encode ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"])
 );;
 
 
-(*
+(**
     Modified run-length encoding. (easy)
 *)
 
@@ -173,7 +173,7 @@ assert ((mencode ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"])
 = [Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e")]
 );;
 
-(*
+(**
     Decode a run-length encoded list. (medium)
 *)
 
@@ -191,7 +191,7 @@ assert ((decode [Many (4,"a"); One "b"; Many (2,"c"); Many (2,"a"); One "d"; Man
 = ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"]
 );;
 
-(*
+(**
     Run-length encoding of a list (direct solution). (medium)
 *)
 
@@ -201,7 +201,7 @@ assert ((encode_v2 ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"])
 *)
 
 
-(*
+(**
     Duplicate the elements of a list. (easy)
 *)
 
@@ -213,7 +213,7 @@ let rec duplicate = function
 assert ((duplicate ["a";"b";"c";"c";"d"])
 = ["a"; "a"; "b"; "b"; "c"; "c"; "c"; "c"; "d"; "d"]);;
 
-(*
+(**
     Replicate the elements of a list a given number of times. (medium)
 *)
 
@@ -232,7 +232,7 @@ assert ((replicate ["a";"b";"c"] 3) = ["a"; "a"; "a"; "b"; "b"; "b"; "c"; "c"; "
 ;;
 
 
-(*
+(**
     Drop every N'th element from a list. (medium)
 *)
 
@@ -247,7 +247,7 @@ assert ((drop ["a";"b";"c";"d";"e";"f";"g";"h";"i";"j"] 3) = ["a"; "b"; "d"; "e"
 ;;
 
 
-(*
+(**
     Split a list into two parts; the length of the first part is given. (easy)
 *)
 
@@ -263,7 +263,7 @@ assert((split ["a";"b";"c";"d";"e";"f";"g";"h";"i";"j"] 3) = (["a"; "b"; "c"], [
 assert((split ["a";"b";"c";"d"] 5)=(["a"; "b"; "c"; "d"], []));
 assert((split ["a";"b";"c";"d"] 0)=([],["a"; "b"; "c"; "d"]));; (*extra*)
 
-(*
+(**
     Extract a slice from a list. (medium)
 *)
 
@@ -275,7 +275,7 @@ assert ((slice ["a";"b";"c";"d";"e";"f";"g";"h";"i";"j"] 2 6) = ["c"; "d"; "e"; 
 ;;
 
 
-(*
+(**
     Rotate a list N places to the left. (medium)
 *)
 
@@ -289,7 +289,7 @@ assert ((rotate ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] 3) = ["d"; "e"; "f"; "g
 assert ((rotate ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] (-2)) = ["g"; "h"; "a"; "b"; "c"; "d"; "e"; "f"])
 ;;
 
-(*
+(**
 	Remove the K'th element from a list. (easy)
 *)
 
@@ -301,7 +301,7 @@ let remove_at n list=
 assert ((remove_at 1 ["a";"b";"c";"d"])=["a"; "c"; "d"]);
 assert ((remove_at 0 ["a";"b";"c";"d"])=["b"; "c"; "d"]);; (*extra*)
 
-(*
+(**
     Insert an element at a given position into a list. (easy)
 *)
 
@@ -314,7 +314,7 @@ assert ((insert_at "alfa" 1 ["a";"b";"c";"d"]) = ["a"; "alfa"; "b"; "c"; "d"]);
 assert ((insert_at "alfa" 3 ["a";"b";"c";"d"]) = ["a"; "b"; "c"; "alfa"; "d"]);
 assert ((insert_at "alfa" 4 ["a";"b";"c";"d"]) = ["a"; "b"; "c"; "d"; "alfa"]);;
 
-(*
+(**
     Create a list containing all integers within a given range. (easy)
 *)
 
