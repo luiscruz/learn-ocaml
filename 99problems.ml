@@ -328,4 +328,51 @@ let rec range i n =
 assert ((range 4 9) = [4; 5; 6; 7; 8; 9]);
 assert ((range 9 4) = [9; 8; 7; 6; 5; 4]);;
 
+(**
+	Extract a given number of randomly selected elements from a list. (medium)
+*)
+
+let rec rand_select list n=
+	let list_len = List.length list in
+	let random_number = (Random.int list_len) in
+	if n>0 then (List.nth list random_number)::(rand_select list (n-1)) else []
+;;
+(* random result -- hard to verify *)
+assert (List.length (rand_select ["a";"b";"c";"d";"e";"f";"g";"h"] 3) = 3);;
+
+(**
+	Lotto: Draw N different random numbers from the set 1..M. (easy)
+*)
+
+let rec lotto_select n m= 
+	if n > 0 then
+		(Random.int m)::(lotto_select (n-1) m)
+	else []
+;;
+
+let n= 6 in let m = 49 in
+assert (List.fold_left (&&) true (List.map (fun x -> (x>=1)&&(x<=m)) (lotto_select n m)));
+(assert (List.length (lotto_select n m) = n))
+;;
+
+(**
+	Generate a random permutation of the elements of a list. (easy)
+*)
+let permutation list = 
+	let rec extract acum i = function
+		| [] -> (None, List.rev acum)
+		| h::t ->  if i> 0 then extract (h::acum) (i-1) t else (Some h, (List.rev acum)@t) in
+	let rec extract_n n list = 
+		if n>0 then
+			match (extract [] (Random.int n) list) with
+			| (None, l) -> l
+			| (Some x, new_list) -> x::(extract_n (n-1) new_list)
+		else []
+	in
+	let list_len = (List.length list) in
+	(extract_n list_len list)
+;;
+assert ((List.sort compare (permutation ["a"; "b"; "c"; "d"; "e"; "f"])) = (List.sort compare ["a"; "e"; "f"; "b"; "d"; "c"]))
+;;
+
 print_endline "Ok."
