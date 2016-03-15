@@ -301,4 +301,31 @@ let remove_at n list=
 assert ((remove_at 1 ["a";"b";"c";"d"])=["a"; "c"; "d"]);
 assert ((remove_at 0 ["a";"b";"c";"d"])=["b"; "c"; "d"]);; (*extra*)
 
+(*
+    Insert an element at a given position into a list. (easy)
+*)
+
+let rec insert_at elem n= function
+    | [] -> [elem]
+    | h::t as l -> if n > 0 then h::(insert_at elem (n-1) t) else elem::l
+;;
+
+assert ((insert_at "alfa" 1 ["a";"b";"c";"d"]) = ["a"; "alfa"; "b"; "c"; "d"]);
+assert ((insert_at "alfa" 3 ["a";"b";"c";"d"]) = ["a"; "b"; "c"; "alfa"; "d"]);
+assert ((insert_at "alfa" 4 ["a";"b";"c";"d"]) = ["a"; "b"; "c"; "d"; "alfa"]);;
+
+(*
+    Create a list containing all integers within a given range. (easy)
+*)
+
+let rec range i n =
+    if i < n then i::(range (i+1) n)
+    else
+        if i>n then  i::(range (i-1) n)
+        else [n]
+;;
+
+assert ((range 4 9) = [4; 5; 6; 7; 8; 9]);
+assert ((range 9 4) = [9; 8; 7; 6; 5; 4]);;
+
 print_endline "Ok."
